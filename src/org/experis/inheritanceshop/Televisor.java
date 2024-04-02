@@ -2,17 +2,17 @@ package org.experis.inheritanceshop;
 
 import java.math.BigDecimal;
 
-public class Televisors extends Product{
+public class Televisor extends Product{
 
     //attributi
 
     private int screenSize;
-    private boolean IsSmart;
+    private boolean isSmart;
     //costrutture
-    public Televisors(String name, String brand, BigDecimal price, BigDecimal vat, int quantity, int screenSize, boolean isSmart) {
+    public Televisor(String name, String brand, BigDecimal price, BigDecimal vat, int quantity, int screenSize, boolean isSmart) {
         super(name, brand, price, vat, quantity);
         this.screenSize = screenSize;
-        IsSmart = isSmart;
+        isSmart = this.isSmart;
     }
 
     //getters and setters
@@ -27,10 +27,15 @@ public class Televisors extends Product{
     }
 
     public boolean isSmart() {
-        return IsSmart;
+        return this.isSmart;
     }
 
     public void setSmart(boolean smart) {
-        IsSmart = smart;
+        isSmart = smart;
+    }
+
+    @Override
+    public String productDetails() {
+        return super.productDetails() + String.format(", Screen Size: %d inch, Smart TV: %s", screenSize, isSmart ? "Yes" : "No");
     }
 }

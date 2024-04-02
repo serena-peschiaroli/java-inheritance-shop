@@ -74,6 +74,10 @@ public class Product {
         return this.price;
     }
 
+    public BigDecimal getVat() {
+        return this.vat;
+    }
+
     public boolean getIsVisible() {
         return this.isVisible;
     }
@@ -103,7 +107,7 @@ public class Product {
     }
 
     //metodo per dettagli prodotto:
-    public String dettagliProdotto() {
+    public String productDetails() {
         return String.format("Id: %d, Name: %s, Brand: %s, Net Price: €%.2f, VAT: %.0f%%, Total Price: €%.2f",
                 id, name, brand, price, vat, getTotalPrice());
     }

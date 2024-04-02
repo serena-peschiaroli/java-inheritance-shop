@@ -1,6 +1,7 @@
 package org.experis.inheritanceshop;
 
 import java.math.BigDecimal;
+import java.util.Random;
 
 public class Smartphone extends Product{
     //Attributi
@@ -8,9 +9,9 @@ public class Smartphone extends Product{
     private int memorySize;
 
     //costrotture
-    public Smartphone(String name, String brand, BigDecimal price, BigDecimal vat, int quantity, String imei, int memorySize) {
+    public Smartphone(String name, String brand, BigDecimal price, BigDecimal vat, int quantity, int memorySize) {
         super(name, brand, price, vat, quantity);
-        this.imei = imei;
+        this.imei = generateImei();
         this.memorySize = memorySize;
     }
     //getters & setters
@@ -29,4 +30,16 @@ public class Smartphone extends Product{
     public void setMemorySize(int memorySize) {
         this.memorySize = memorySize;
     }
+
+    //dettagli prodotto
+    @Override
+    public String productDetails() {
+        return super.productDetails() + String.format(", IMEI: %s, Memory Size: %dGB", imei, memorySize);
+    }
+
+    public String generateImei(){
+        Random random = new Random();
+        return "IMEI" + random.nextInt(1000000000);
+    }
 }
+

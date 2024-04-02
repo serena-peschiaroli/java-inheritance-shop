@@ -2,7 +2,7 @@ package org.experis.inheritanceshop;
 
 import java.math.BigDecimal;
 
-public class Headphones extends Product{
+public class Headphone extends Product{
 
     private String color;
     private boolean isWireless;
@@ -10,7 +10,7 @@ public class Headphones extends Product{
     //costruttore
 
 
-    public Headphones(String name, String brand, BigDecimal price, BigDecimal vat, int quantity, String color, boolean isWireless) {
+    public Headphone(String name, String brand, BigDecimal price, BigDecimal vat, int quantity, String color, boolean isWireless) {
         super(name, brand, price, vat, quantity);
         this.color = color;
         this.isWireless = isWireless;
@@ -33,5 +33,10 @@ public class Headphones extends Product{
 
     public void setWireless(boolean wireless) {
         isWireless = wireless;
+    }
+
+    @Override
+    public String productDetails() {
+        return super.productDetails() + String.format(", Color: %s, Wireless: %s", color, isWireless ? "Yes" : "No");
     }
 }
