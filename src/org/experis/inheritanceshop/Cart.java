@@ -76,13 +76,11 @@ public class Cart {
                 break;
             default:
                 System.out.println("Invalid selection. Please try again.");
-                return; // Early return to avoid adding null products and repeating the loop iteration
+                return;
         }
 
-        if (product != null) {
-            cart[index] = product;
-            System.out.println("Added " + product.getName() + " to your cart.");
-        }
+        cart[index] = product;
+        System.out.println("Added " + product.getName() + " to your cart.");
     }
 
     //mostra prezzo tot del carrello
@@ -114,7 +112,7 @@ public class Cart {
             return Integer.parseInt(scan.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid number.");
-            return getIntInput(prompt); // Recursive call until valid input is received
+            return getIntInput(prompt); // ricorsiva fino a che un input valido non è stato immesso
         }
     }
     private static Smartphone getSmartphoneDetails() {
