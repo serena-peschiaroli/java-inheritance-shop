@@ -38,4 +38,16 @@ public class Televisor extends Product{
     public String productDetails() {
         return super.productDetails() + String.format(", Screen Size: %d inch, Smart TV: %s", screenSize, isSmart ? "Yes" : "No");
     }
+
+    //scontistica con override
+
+    // override per ottenere sconto per i televisori
+    @Override
+    public BigDecimal getDefaultDiscountRate() {
+        if (!this.isSmart()) {
+            return BigDecimal.valueOf(0.10);
+        } else {
+            return super.getDefaultDiscountRate();
+        }
+    }
 }

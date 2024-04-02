@@ -41,5 +41,16 @@ public class Smartphone extends Product{
         Random random = new Random();
         return "IMEI" + random.nextInt(1000000000);
     }
+
+    //scontistica con override
+
+    @Override
+    public BigDecimal getDefaultDiscountRate() {
+        if (this.memorySize <= 64) {
+            return BigDecimal.valueOf(0.05);
+        } else {
+            return super.getDefaultDiscountRate();
+        }
+    }
 }
 

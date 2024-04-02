@@ -39,4 +39,15 @@ public class Headphone extends Product{
     public String productDetails() {
         return super.productDetails() + String.format(", Color: %s, Wireless: %s", color, isWireless ? "Yes" : "No");
     }
+
+    //scontistica con override
+
+    @Override
+    public BigDecimal getDefaultDiscountRate() {
+        if (!this.isWireless()) {
+            return BigDecimal.valueOf(0.07);
+        } else {
+            return super.getDefaultDiscountRate();
+        }
+    }
 }

@@ -8,6 +8,9 @@ public class Cart {
     private static Scanner scan = new Scanner(System.in);
     private static Product[] cart;
     public static void main(String[] args) {
+        System.out.print("Do you have a loyalty card? (y/n): ");
+        String loyaltyCardResponse = scan.nextLine();
+        boolean hasLoyaltyCard = loyaltyCardResponse.equalsIgnoreCase("y");
         System.out.println("How many products? ");
         int size = Integer.parseInt(scan.nextLine());
         cart = new Product[size];
@@ -48,9 +51,12 @@ public class Cart {
         for (Product product : cart) {
             if (product != null) {
 
-                System.out.println(product);
+                System.out.println(product.productDetails());
+
             }
         }
+        //prezzo totale
+        System.out.println("Total : " + getCartTotalPrice(hasLoyaltyCard));
     }
 
     //aggiungi al carrello
@@ -115,5 +121,23 @@ public class Cart {
         }
         //aggiunta del prodotto al carrello
         System.out.println("Added " + name + " to your cart.");
+    }
+
+    //mostra prezzo tot del carrello
+
+    public static BigDecimal getCartTotalPrice(boolean hasLoyaltyCard) {
+        BigDecimal cartTotalPrice = BigDecimal.ZERO;
+        for (Product product : cart) {
+            if (product != null) {
+                BigDecimal productPrice;
+                if (hasLoyaltyCard) {
+                     productPrice = product.getDiscountedTotalPrice(true);
+                } else {
+                    productPrice = product.getTotalPrice();
+                }
+                cartTotalPrice = cartTotalPrice.add(productPrice);
+            }
+        }
+        return cartTotalPrice;
     }
 }

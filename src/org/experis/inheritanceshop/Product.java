@@ -111,6 +111,38 @@ public class Product {
         return String.format("Id: %d, Name: %s, Brand: %s, Net Price: €%.2f, VAT: %.0f%%, Total Price: €%.2f",
                 id, name, brand, price, vat, getTotalPrice());
     }
+
+    //scontistica
+
+    // sconto di default
+    public BigDecimal getDefaultDiscountRate() {
+        return BigDecimal.valueOf(0.02);
+    }
+
+    // per ottenere il prezzo scontato
+    public BigDecimal getDiscountedPrice(boolean hasLoyaltyCard) {
+        BigDecimal discountRate = getDefaultDiscountRate();
+
+        //aggiungere lo sconto default se carta fedeltà
+        if (hasLoyaltyCard) {
+            discountRate = discountRate.add(BigDecimal.valueOf(0.02));
+        }
+
+        // calcolo del prezzo scontato
+        BigDecimal discountAmount = this.price.multiply(discountRate);
+        BigDecimal discountedPrice = this.price.subtract(discountAmount);
+
+        return discountedPrice.setScale(2, RoundingMode.HALF_EVEN);
+    }
+
+    // ottenere il prezzo totale scontato
+    public BigDecimal getDiscountedTotalPrice(boolean hasLoyaltyCard) {
+        BigDecimal discountedPrice = getDiscountedPrice(hasLoyaltyCard);
+        BigDecimal vatRate = this.vat.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP).add(BigDecimal.ONE);
+        BigDecimal totalPrice = discountedPrice.multiply(vatRate);
+        return totalPrice.setScale(2, RoundingMode.HALF_EVEN);
+    }
+
 }
 
 
