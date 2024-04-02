@@ -59,68 +59,30 @@ public class Cart {
         System.out.println("Total : " + getCartTotalPrice(hasLoyaltyCard));
     }
 
-    //aggiungi al carrello
+    /*aggiungi al carrello a seconda della selezione dell'utente
+    * */
     private static void addToCart(int index, String productType) {
-        String name, brand;
-        BigDecimal price, extraCost = BigDecimal.ZERO;
-        int memorySize = 64, screenSize = 32;
-        boolean isSmart = false, isWireless = false;
+        Product product = null;
 
-        // attributi comuni
-        System.out.print("Add Name: ");
-        name = scan.nextLine();
-        System.out.print("Add brand: ");
-        brand = scan.nextLine();
-        //Customizzazioni del prodotto
         switch (productType) {
             case "Smartphone":
-                System.out.println("Select memory size:");
-                System.out.println("1. 64GB (no extra cost)");
-                System.out.println("2. 128GB (+€50)");
-                System.out.println("3. 256GB (+€100)");
-                int memoryChoice = Integer.parseInt(scan.nextLine());
-                memorySize = memoryChoice == 1 ? 64 : memoryChoice == 2 ? 128 : 256;
-                extraCost = memoryChoice == 1 ? BigDecimal.ZERO : memoryChoice == 2 ? new BigDecimal("50") : new BigDecimal("100");
-                price = new BigDecimal("999.99").add(extraCost);
-                cart[index] = new Smartphone(name, brand, price, new BigDecimal("22"), 1, memorySize);
+                product = getSmartphoneDetails();
                 break;
             case "Televisor":
-                System.out.println("Choose screen size:");
-                System.out.println("1. 32-inch (€350.00)");
-                System.out.println("2. 44-inch (€450.00)");
-                int screenChoice = Integer.parseInt(scan.nextLine());
-                System.out.println("Smart Tv?");
-                System.out.println("1. Yes (+€100.00)");
-                System.out.println("2. No");
-                int smartChoice = Integer.parseInt(scan.nextLine());
-                isSmart = smartChoice == 1;
-                extraCost = isSmart ? new BigDecimal("100") : BigDecimal.ZERO;
-                screenSize = screenChoice == 1 ? 32 : 44;
-                price = screenChoice == 1 ? new BigDecimal("350.00") : new BigDecimal("450.00").add(extraCost);
-                Televisor customizedTelevisor = new Televisor(name, brand, price, new BigDecimal("22"), 1, screenSize, isSmart);
-                cart[index] = customizedTelevisor;
-                System.out.println("Added " + customizedTelevisor.getName() + " " + screenSize + "-inch" + (isSmart ? " Smart TV" : "") + " to your cart.");
+                product = getTelevisorDetails();
                 break;
             case "Headphones":
-                System.out.println("Choose color:");
-                System.out.println("1. Black (no extra cost)");
-                System.out.println("2. White (+€25 for wireless feature)");
-                int colorChoice = Integer.parseInt(scan.nextLine());
-                BigDecimal headphoneExtra = BigDecimal.ZERO;
-                isWireless = colorChoice == 2;
-                if (isWireless) {
-                    headphoneExtra = new BigDecimal("25");
-                }
-                price = new BigDecimal("100.00").add(headphoneExtra);
-                Headphone customizedHeadphone = new Headphone(name, brand, price, new BigDecimal("22"), 1, colorChoice == 2 ? "White" : "Black", isWireless);
-                //aggiungi al carrello all'indice specifico
-                cart[index] = customizedHeadphone;
-                System.out.println("Added " + customizedHeadphone.getName() + " in " + (isWireless ? "White (Wireless)" : "Black") + " to your cart.");
-
+                product = getHeadphoneDetails();
                 break;
+            default:
+                System.out.println("Invalid selection. Please try again.");
+                return; // Early return to avoid adding null products and repeating the loop iteration
         }
-        //aggiunta del prodotto al carrello
-        System.out.println("Added " + name + " to your cart.");
+
+        if (product != null) {
+            cart[index] = product;
+            System.out.println("Added " + product.getName() + " to your cart.");
+        }
     }
 
     //mostra prezzo tot del carrello
@@ -140,4 +102,96 @@ public class Cart {
         }
         return cartTotalPrice;
     }
+
+    private static String getInput(String prompt) {
+        System.out.print(prompt);
+        return scan.nextLine();
+    }
+
+    private static int getIntInput(String prompt) {
+        System.out.print(prompt);
+        try {
+            return Integer.parseInt(scan.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+            return getIntInput(prompt); // Recursive call until valid input is received
+        }
+    }
+    private static Smartphone getSmartphoneDetails() {
+        String name = getInput("Add Name: ");
+        String brand = getInput("Add Brand: ");
+        System.out.println("Select memory size:");
+        System.out.println("1. 64GB (no extra cost)");
+        System.out.println("2. 128GB (+€50)");
+        System.out.println("3. 256GB (+€100)");
+        int memoryChoice = getIntInput("");
+        int memorySize = 64; // valore di default
+        BigDecimal extraCost = BigDecimal.ZERO; // valore di default
+
+        switch (memoryChoice) {
+            case 2:
+                memorySize = 128;
+                extraCost = new BigDecimal("50");
+                break;
+            case 3:
+                memorySize = 256;
+                extraCost = new BigDecimal("100");
+                break;
+
+        }
+
+        BigDecimal price = new BigDecimal("999.99").add(extraCost);
+        return new Smartphone(name, brand, price, new BigDecimal("22"), 1, memorySize);
+    }
+
+    private static Televisor getTelevisorDetails() {
+        String name = getInput("Add Name: ");
+        String brand = getInput("Add Brand: ");
+        System.out.println("Select screen size:");
+        System.out.println("1. 32-inch (€350.00)");
+        System.out.println("2. 44-inch (+€150.00)");
+
+        int screenChoice = getIntInput("");
+        int screenSize = 32;
+        BigDecimal extraCost = BigDecimal.ZERO;
+
+        if (screenChoice == 2) {
+            screenSize = 44;
+            extraCost = new BigDecimal("150");
+        }
+
+        System.out.println("Do you want a Smart TV? (y/n): ");
+        String tvChoice = getInput("").trim().toLowerCase();
+        boolean isSmart = "y".equals(tvChoice);
+
+        if (isSmart) {
+            extraCost = extraCost.add(new BigDecimal("100"));
+        }
+
+        // calcolare il prezzo base prima di aggiungere il costo extra
+        BigDecimal basePrice = screenSize == 32 ? new BigDecimal("350.00") : new BigDecimal("500.00");
+        BigDecimal price = basePrice.add(extraCost);
+        return new Televisor(name, brand, price, new BigDecimal("22"), 1, screenSize, isSmart);
+    }
+
+    private static Headphone getHeadphoneDetails() {
+        String name = getInput("Add Name: ");
+        String brand = getInput("Add Brand: ");
+        System.out.println("Choose color:");
+        System.out.println("1. Black (no extra cost)");
+        System.out.println("2. White (+€25 for wireless feature)");
+
+        int colorChoice = getIntInput("");
+        boolean isWireless = colorChoice == 2;
+        String color = isWireless ? "White" : "Black";
+        BigDecimal headphoneExtra = isWireless ? new BigDecimal("25") : BigDecimal.ZERO;
+
+        BigDecimal price = new BigDecimal("100.00").add(headphoneExtra);
+        return new Headphone(name, brand, price, new BigDecimal("22"), 1, color, isWireless);
+    }
+
+
+
+
+
 }

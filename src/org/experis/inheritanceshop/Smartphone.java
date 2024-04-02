@@ -37,12 +37,14 @@ public class Smartphone extends Product{
         return super.productDetails() + String.format(", IMEI: %s, Memory Size: %dGB", imei, memorySize);
     }
 
-    public String generateImei(){
+    //Genera un IMEi per gli smartphone
+    private String generateImei(){
         Random random = new Random();
         return "IMEI" + random.nextInt(1000000000);
     }
 
     //scontistica con override
+    //provvedere unpo sconto più alto per smartphone con memoria fino a 64GB
 
     @Override
     public BigDecimal getDefaultDiscountRate() {

@@ -27,7 +27,7 @@ public class Product {
 
     //metodi
     //ottieni codice id random
-    public int generateRandomId() {
+    private int generateRandomId() {
         Random random = new Random();
         // genera un numero casuale comresop tra 100000 e 99999999
         return 100000 + random.nextInt(90000000);
@@ -51,59 +51,47 @@ public class Product {
         return String.format("%08d", this.id) + "-" + this.name;
     }
 
-    //getters per accedere i valori delle istanze
+    //standard getters per gli attributi
 
-    //id
     public int getId() {
         return this.id;
     }
-    //name
     public String getName(){
         return this.name;
     }
-
     public String getBrand() {
         return this.brand;
     }
-
     public int getQuantity() {
         return this.quantity;
     }
-
     public BigDecimal getPrice() {
         return this.price;
     }
-
     public BigDecimal getVat() {
         return this.vat;
     }
-
     public boolean getIsVisible() {
         return this.isVisible;
     }
 
-
-    //setters
-
+    //standard setter per modificare gli attributi del prodotto
 
     public void setName(String name) {
         this.name = name;
     }
-
     public void setBrand(String brand) {
         this.brand = brand;
     }
-
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
     public void setVat(BigDecimal vat) {
         this.vat = vat;
     }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        this.isVisible = quantity > 0;
     }
 
     //metodo per dettagli prodotto:
@@ -119,7 +107,10 @@ public class Product {
         return BigDecimal.valueOf(0.02);
     }
 
-    // per ottenere il prezzo scontato
+    /* per ottenere il prezzo scontato: calcola il prezzo del prodotto
+    * dopo aver applicato uno sconto. Uno sconto addizionale è applicato se il
+    * cliente possiete carta fedeltà.
+    * */
     public BigDecimal getDiscountedPrice(boolean hasLoyaltyCard) {
         BigDecimal discountRate = getDefaultDiscountRate();
 
@@ -135,7 +126,11 @@ public class Product {
         return discountedPrice.setScale(2, RoundingMode.HALF_EVEN);
     }
 
-    // ottenere il prezzo totale scontato
+    /*
+    * Calcola il prezzo totale del prodotto dopo gli sconti inclusa iva
+    *
+    * applica uno sconto addizionale per la carta fedeltà
+    * */
     public BigDecimal getDiscountedTotalPrice(boolean hasLoyaltyCard) {
         BigDecimal discountedPrice = getDiscountedPrice(hasLoyaltyCard);
         BigDecimal vatRate = this.vat.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP).add(BigDecimal.ONE);
